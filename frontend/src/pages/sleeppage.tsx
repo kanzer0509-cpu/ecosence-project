@@ -1,6 +1,7 @@
 import InfoCard from '../components/common/InfoCard';
 import { useNoiseStore } from '../stores/useNoiseStore';
 import { useAudio } from '../hooks/useAudio';
+import { getDbComment } from '../utils/db';
 
 export default function SleepPage() {
   const { isMeasuring, currentDb } = useNoiseStore();
@@ -25,7 +26,7 @@ export default function SleepPage() {
       <InfoCard
         title="현재 소음"
         value={currentDb === null ? '-- dB' : `${currentDb.toFixed(1)} dB`}
-        description="마이크 권한 허용 후 실시간 소음이 표시됩니다."
+        description={getDbComment(currentDb)}
       />
 
       <div>
