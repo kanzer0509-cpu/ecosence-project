@@ -3,6 +3,7 @@ import { useState } from 'react';
 import InfoCard from '../components/common/InfoCard';
 import { getOutdoorData } from '../services/outdoor';
 import { useOutdoorStore } from '../stores/useOutdoorStore';
+import { getAqiComment } from '../utils/aqi';
 
 export default function OutdoorPage() {
   const { data, location, setLocation, setData } = useOutdoorStore();
@@ -77,7 +78,7 @@ export default function OutdoorPage() {
         <InfoCard
           title="AQI"
           value={displayData.aqi}
-          description="대기질 상태입니다."
+          description={getAqiComment(displayData.aqi)}
         />
       </div>
 
