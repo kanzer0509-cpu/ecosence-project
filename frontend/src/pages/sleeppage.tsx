@@ -5,7 +5,7 @@ import { getDbComment } from '../utils/db';
 import NoiseChart from '../components/charts/NoiseChart';
 
 export default function SleepPage() {
-  const { mode, isMeasuring, currentDb, setMode } = useNoiseStore();
+  const { mode, isMeasuring, currentDb, setMode, spikes } = useNoiseStore();
   const { startAudio, stopAudio } = useAudio();
   
   return (
@@ -58,6 +58,21 @@ export default function SleepPage() {
       <div>
         <h3>소음 변화 그래프</h3>
         <NoiseChart />
+        <div>
+          <h3>이상 소음 감지</h3>
+
+          {spikes.length === 0 ? (
+            <p>감지된 이상 소음이 없습니다.</p>
+          ) : (
+            <ul>
+              {spikes.map((spike, index) => (
+                <li key={index}>
+                  {spike.timestamp} - {spike.db} dB
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       </div>
     </section>
   );

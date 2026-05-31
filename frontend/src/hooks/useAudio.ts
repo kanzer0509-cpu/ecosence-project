@@ -7,7 +7,12 @@ export const useAudio = () => {
   const analyserRef = useRef<AnalyserNode | null>(null);
   const animationFrameRef = useRef<number | null>(null);
 
-  const { startMeasuring, stopMeasuring, setCurrentDb } = useNoiseStore();
+  const {
+    startMeasuring,
+    stopMeasuring,
+    setCurrentDb,
+    addSpike,
+  } = useNoiseStore();
 
   const startAudio = async () => {
     try {
@@ -39,8 +44,16 @@ export const useAudio = () => {
 
         const rms = Math.sqrt(sum / dataArray.length);
         const db = 20 * Math.log10(rms || 0.00001) + 100;
+        const currentDb = Math.max(0, db);
 
-        setCurrentDb(Math.max(0, db));
+        setCurrentDb(currentDb);
+
+        if (currentDb >= 70) {
+          addSpike({
+            timestamp: new Date().toLocaleTimeString(),
+            db: Number(currentDb.toFixed(1)),
+          });
+        }
 
         animationFrameRef.current = requestAnimationFrame(measure);
       };
