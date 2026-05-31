@@ -1,9 +1,13 @@
 import InfoCard from '../components/common/InfoCard';
 import SensorConnectButton from '../components/indoor/SensorConnectButton';
+
+import { useBluetooth } from '../hooks/useBluetooth';
 import { useSensorStore } from '../stores/useSensorStore';
 
 export default function IndoorPage() {
-  const { isConnected, data, connect, disconnect } = useSensorStore();
+  const { isConnected, data } = useSensorStore();
+
+  const { connectSensor, disconnectSensor } = useBluetooth();
 
   return (
     <section>
@@ -11,8 +15,8 @@ export default function IndoorPage() {
 
       <SensorConnectButton
         isConnected={isConnected}
-        onConnect={connect}
-        onDisconnect={disconnect}
+        onConnect={connectSensor}
+        onDisconnect={disconnectSensor}
       />
 
       <p>센서 상태: {isConnected ? '연결됨' : '연결 안 됨'}</p>
@@ -23,6 +27,7 @@ export default function IndoorPage() {
           value={data.temperature === null ? '--℃' : `${data.temperature}℃`}
           description="샤오미 미지아 센서 기준 온도입니다."
         />
+
         <InfoCard
           title="실내 습도"
           value={data.humidity === null ? '--%' : `${data.humidity}%`}
