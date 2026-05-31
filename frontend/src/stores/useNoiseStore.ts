@@ -2,17 +2,25 @@ import { create } from 'zustand';
 
 type NoiseMode = 'normal' | 'sleep';
 
+interface Spike {
+  timestamp: string;
+  db: number;
+}
+
 interface NoiseState {
-    mode: NoiseMode;
-    isMeasuring: boolean;
-    currentDb: number | null;
-    history: number[];
+  mode: NoiseMode;
+  isMeasuring: boolean;
+  currentDb: number | null;
+  history: number[];
+  spikes: Spike[];
 
   setMode: (mode: NoiseMode) => void;
   startMeasuring: () => void;
   stopMeasuring: () => void;
   setCurrentDb: (db: number) => void;
   clearHistory: () => void;
+  addSpike: (spike: Spike) => void;
+  clearSpikes: () => void;
 }
 
 export const useNoiseStore = create<NoiseState>((set) => ({
@@ -20,6 +28,7 @@ export const useNoiseStore = create<NoiseState>((set) => ({
   isMeasuring: false,
   currentDb: null,
   history: [],
+  spikes: [],
 
   setMode: (mode) => set({ mode }),
 
@@ -45,5 +54,15 @@ export const useNoiseStore = create<NoiseState>((set) => ({
     set({
       history: [],
       currentDb: null,
+    }),
+
+  addSpike: (spike) =>
+    set((state) => ({
+      spikes: [...state.spikes, spike],
+    })),
+
+  clearSpikes: () =>
+    set({
+      spikes: [],
     }),
 }));
