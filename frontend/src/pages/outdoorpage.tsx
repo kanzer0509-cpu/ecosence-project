@@ -4,6 +4,7 @@ import InfoCard from '../components/common/InfoCard';
 import { getOutdoorData } from '../services/outdoor';
 import { useOutdoorStore } from '../stores/useOutdoorStore';
 import { getAqiComment } from '../utils/aqi';
+import OutdoorChart from '../components/charts/OutdoorChart';
 
 export default function OutdoorPage() {
   const { data, location, setLocation, setData } = useOutdoorStore();
@@ -84,7 +85,7 @@ export default function OutdoorPage() {
 
       <div>
         <h3>실외 환경 변화 그래프</h3>
-        <p>그래프 영역</p>
+        <OutdoorChart />
       </div>
     </section>
   );
