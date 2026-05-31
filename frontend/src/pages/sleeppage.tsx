@@ -2,6 +2,7 @@ import InfoCard from '../components/common/InfoCard';
 import { useNoiseStore } from '../stores/useNoiseStore';
 import { useAudio } from '../hooks/useAudio';
 import { getDbComment } from '../utils/db';
+import NoiseChart from '../components/charts/NoiseChart';
 
 export default function SleepPage() {
   const { isMeasuring, currentDb } = useNoiseStore();
@@ -31,7 +32,7 @@ export default function SleepPage() {
 
       <div>
         <h3>소음 변화 그래프</h3>
-        <p>그래프 영역</p>
+        <NoiseChart />
       </div>
     </section>
   );
