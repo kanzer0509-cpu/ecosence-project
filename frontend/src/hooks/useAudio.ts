@@ -1,6 +1,6 @@
 import { useRef } from 'react';
-
 import { useNoiseStore } from '../stores/useNoiseStore';
+import { saveSpike } from '../services/indexedDB';
 
 export const useAudio = () => {
   const audioContextRef = useRef<AudioContext | null>(null);
@@ -49,12 +49,17 @@ export const useAudio = () => {
         setCurrentDb(currentDb);
 
         if (currentDb >= 70) {
-          addSpike({
-            timestamp: new Date().toLocaleTimeString(),
-            db: Number(currentDb.toFixed(1)),
-          });
-        }
+            const spike = {
+                timestamp: new Date().toLocaleTimeString(),
+                db: Number(currentDb.toFixed(1)),
+                createdAt: new Date().toISOString(),
+            };
 
+            addSpike(spike);
+            saveSpike(spike).catch((error) => {
+                console.error('스파이크 저장 실패:', error);
+            });
+        }
         animationFrameRef.current = requestAnimationFrame(measure);
       };
 

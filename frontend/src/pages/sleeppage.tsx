@@ -3,11 +3,35 @@ import { useNoiseStore } from '../stores/useNoiseStore';
 import { useAudio } from '../hooks/useAudio';
 import { getDbComment } from '../utils/db';
 import NoiseChart from '../components/charts/NoiseChart';
+import { useEffect } from 'react';
+import { clearSpikes, getSpikes } from '../services/indexedDB';
 
 export default function SleepPage() {
   const { mode, isMeasuring, currentDb, setMode, spikes } = useNoiseStore();
   const { startAudio, stopAudio } = useAudio();
   
+  useEffect(() => {
+    const loadSpikes = async () => {
+      try {
+        const savedSpikes = await getSpikes();
+        console.log('저장된 스파이크:', savedSpikes);
+      } catch (error) {
+        console.error('스파이크 조회 실패:', error);
+      }
+    };
+    loadSpikes();
+  }, []);
+  
+  const handleClearSpikes = async () => {
+    try {
+      await clearSpikes();
+      alert('저장된 이상 소음 기록을 초기화했습니다.');
+    } catch (error) {
+      console.error('스파이크 초기화 실패:', error);
+      alert('이상 소음 기록 초기화에 실패했습니다.');
+    }
+  };
+
   return (
     <section>
       <h2>수면/소음 측정</h2>
@@ -60,6 +84,10 @@ export default function SleepPage() {
         <NoiseChart />
         <div>
           <h3>이상 소음 감지</h3>
+          
+          <button type="button" onClick={handleClearSpikes}>
+          이상 소음 기록 초기화
+        </button>
 
           {spikes.length === 0 ? (
             <p>감지된 이상 소음이 없습니다.</p>
