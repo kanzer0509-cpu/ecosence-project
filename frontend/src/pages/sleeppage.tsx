@@ -5,24 +5,49 @@ import { getDbComment } from '../utils/db';
 import NoiseChart from '../components/charts/NoiseChart';
 
 export default function SleepPage() {
-  const { isMeasuring, currentDb } = useNoiseStore();
+  const { mode, isMeasuring, currentDb, setMode } = useNoiseStore();
   const { startAudio, stopAudio } = useAudio();
-
+  
   return (
     <section>
       <h2>수면/소음 측정</h2>
 
       <div>
-        <button type="button" onClick={startAudio} disabled={isMeasuring}>
-          소음 측정 시작
+        <button
+          type="button"
+          onClick={() => setMode('normal')}
+          disabled={isMeasuring}
+        >
+          일반 소음 측정
         </button>
 
-        <button type="button" onClick={stopAudio} disabled={!isMeasuring}>
-          측정 종료
+        <button
+          type="button"
+          onClick={() => setMode('sleep')}
+          disabled={isMeasuring}
+        >
+          수면 소음 측정
         </button>
       </div>
 
-      <p>측정 상태: {isMeasuring ? '측정 중' : '대기 중'}</p>
+      <p>
+        현재 모드:
+        {mode === 'normal' ? ' 일반 소음 측정' : ' 수면 소음 측정'}
+      </p>
+
+      <div>
+        <button type="button" onClick={startAudio} disabled={isMeasuring}>
+          {mode === 'normal' ? '일반 소음 측정 시작' : '수면 소음 측정 시작'}
+        </button>
+
+        <button type="button" onClick={stopAudio} disabled={!isMeasuring}>
+          {mode === 'normal' ? '일반 소음 측정 종료' : '수면 소음 측정 종료'}
+        </button>
+      </div>
+
+      <p>
+        측정 상태: {isMeasuring ? '측정 중' : '대기 중'}
+      </p>
 
       <InfoCard
         title="현재 소음"

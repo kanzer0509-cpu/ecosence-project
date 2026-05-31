@@ -1,10 +1,14 @@
 import { create } from 'zustand';
 
-interface NoiseState {
-  isMeasuring: boolean;
-  currentDb: number | null;
-  history: number[];
+type NoiseMode = 'normal' | 'sleep';
 
+interface NoiseState {
+    mode: NoiseMode;
+    isMeasuring: boolean;
+    currentDb: number | null;
+    history: number[];
+
+  setMode: (mode: NoiseMode) => void;
   startMeasuring: () => void;
   stopMeasuring: () => void;
   setCurrentDb: (db: number) => void;
@@ -12,9 +16,12 @@ interface NoiseState {
 }
 
 export const useNoiseStore = create<NoiseState>((set) => ({
+  mode: 'normal',
   isMeasuring: false,
   currentDb: null,
   history: [],
+
+  setMode: (mode) => set({ mode }),
 
   startMeasuring: () =>
     set({
