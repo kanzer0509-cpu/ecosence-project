@@ -27,6 +27,27 @@ export default function OutdoorPage() {
     }
   };
 
+  const handleUseCurrentLocation = () => {
+  if (!navigator.geolocation) {
+    alert('이 브라우저에서는 위치 정보를 지원하지 않습니다.');
+    return;
+  }
+
+  navigator.geolocation.getCurrentPosition(
+    (position) => {
+      const { latitude, longitude } = position.coords;
+
+      const locationText = `${latitude},${longitude}`;
+      setInputLocation(locationText);
+      setLocation(locationText);
+    },
+    (error) => {
+      console.error('위치 정보 조회 실패:', error);
+      alert('위치 정보를 가져오지 못했습니다.');
+    }
+  );
+};
+
   const displayData = data ?? {
     temperature: 24,
     humidity: 55,
@@ -46,7 +67,9 @@ export default function OutdoorPage() {
           placeholder="지역을 입력하세요 예: 창원"
         />
 
-        <button type="button">현재 위치 사용</button>
+        <button type="button" onClick={handleUseCurrentLocation}>
+          현재 위치 사용
+        </button>
 
         <button type="button" onClick={handleRefresh} disabled={isLoading}>
           {isLoading ? '불러오는 중...' : '새로고침'}
