@@ -1,20 +1,21 @@
 import InfoCard from '../components/common/InfoCard';
 import { useNoiseStore } from '../stores/useNoiseStore';
+import { useAudio } from '../hooks/useAudio';
 
 export default function SleepPage() {
-  const { isMeasuring, currentDb, startMeasuring, stopMeasuring } =
-    useNoiseStore();
+  const { isMeasuring, currentDb } = useNoiseStore();
+  const { startAudio, stopAudio } = useAudio();
 
   return (
     <section>
       <h2>수면/소음 측정</h2>
 
       <div>
-        <button type="button" onClick={startMeasuring} disabled={isMeasuring}>
+        <button type="button" onClick={startAudio} disabled={isMeasuring}>
           소음 측정 시작
         </button>
 
-        <button type="button" onClick={stopMeasuring} disabled={!isMeasuring}>
+        <button type="button" onClick={stopAudio} disabled={!isMeasuring}>
           측정 종료
         </button>
       </div>
