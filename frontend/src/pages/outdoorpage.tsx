@@ -1,22 +1,84 @@
+import { useState } from 'react';
+
 import InfoCard from '../components/common/InfoCard';
+import { getOutdoorData } from '../services/outdoor';
+import { useOutdoorStore } from '../stores/useOutdoorStore';
 
 export default function OutdoorPage() {
+  const { data, location, setLocation, setData } = useOutdoorStore();
+  const [inputLocation, setInputLocation] = useState(location);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleRefresh = async () => {
+    try {
+      setIsLoading(true);
+
+      const outdoorData = await getOutdoorData(inputLocation);
+
+      setLocation(inputLocation);
+      setData(outdoorData);
+    } catch (error) {
+      console.error('실외 데이터 조회 실패:', error);
+      alert('실외 데이터를 불러오지 못했습니다.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const displayData = data ?? {
+    temperature: 24,
+    humidity: 55,
+    precipitation: 0,
+    uv: '보통',
+    aqi: '좋음',
+  };
+
   return (
     <section>
       <h2>실외 대시보드</h2>
 
       <div>
-        <input placeholder="지역을 입력하세요 예: 창원" />
-        <button>현재 위치 사용</button>
-        <button>새로고침</button>
+        <input
+          value={inputLocation}
+          onChange={(event) => setInputLocation(event.target.value)}
+          placeholder="지역을 입력하세요 예: 창원"
+        />
+
+        <button type="button">현재 위치 사용</button>
+
+        <button type="button" onClick={handleRefresh} disabled={isLoading}>
+          {isLoading ? '불러오는 중...' : '새로고침'}
+        </button>
       </div>
 
+      <p>현재 지역: {location}</p>
+
       <div>
-        <InfoCard title="기온" value="24℃" description="쾌적한 기온입니다." />
-        <InfoCard title="습도" value="55%" description="적정 습도입니다." />
-        <InfoCard title="강수량" value="0mm" description="비 예보가 없습니다." />
-        <InfoCard title="UV" value="보통" description="장시간 외출 시 주의하세요." />
-        <InfoCard title="AQI" value="좋음" description="마스크 없이 활동 가능합니다." />
+        <InfoCard
+          title="기온"
+          value={`${displayData.temperature}℃`}
+          description="현재 지역의 기온입니다."
+        />
+        <InfoCard
+          title="습도"
+          value={`${displayData.humidity}%`}
+          description="현재 지역의 습도입니다."
+        />
+        <InfoCard
+          title="강수량"
+          value={`${displayData.precipitation}mm`}
+          description="현재 강수량입니다."
+        />
+        <InfoCard
+          title="UV"
+          value={displayData.uv}
+          description="자외선 지수입니다."
+        />
+        <InfoCard
+          title="AQI"
+          value={displayData.aqi}
+          description="대기질 상태입니다."
+        />
       </div>
 
       <div>

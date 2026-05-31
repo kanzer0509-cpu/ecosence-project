@@ -2,6 +2,7 @@ import axios from 'axios';
 import type { AxiosError, InternalAxiosRequestConfig } from 'axios';
 
 import { useAuthStore } from '../stores/useAuthStore';
+
 const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api';
 
