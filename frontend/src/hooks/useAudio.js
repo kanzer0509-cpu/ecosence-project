@@ -1,18 +1,14 @@
 import { useRef } from 'react';
-import { useNoiseStore } from '../stores/useNoiseStore';
 import { saveSpike } from '../services/indexedDB';
+import { useNoiseStore } from '../stores/useNoiseStore';
 
 export const useAudio = () => {
-  const audioContextRef = useRef<AudioContext | null>(null);
-  const analyserRef = useRef<AnalyserNode | null>(null);
-  const animationFrameRef = useRef<number | null>(null);
+  const audioContextRef = useRef(null);
+  const analyserRef = useRef(null);
+  const animationFrameRef = useRef(null);
 
-  const {
-    startMeasuring,
-    stopMeasuring,
-    setCurrentDb,
-    addSpike,
-  } = useNoiseStore();
+  const { startMeasuring, stopMeasuring, setCurrentDb, addSpike } =
+    useNoiseStore();
 
   const startAudio = async () => {
     try {
@@ -49,17 +45,19 @@ export const useAudio = () => {
         setCurrentDb(currentDb);
 
         if (currentDb >= 70) {
-            const spike = {
-                timestamp: new Date().toLocaleTimeString(),
-                db: Number(currentDb.toFixed(1)),
-                createdAt: new Date().toISOString(),
-            };
+          const spike = {
+            timestamp: new Date().toLocaleTimeString(),
+            db: Number(currentDb.toFixed(1)),
+            createdAt: new Date().toISOString(),
+          };
 
-            addSpike(spike);
-            saveSpike(spike).catch((error) => {
-                console.error('스파이크 저장 실패:', error);
-            });
+          addSpike(spike);
+
+          saveSpike(spike).catch((error) => {
+            console.error('스파이크 저장 실패:', error);
+          });
         }
+
         animationFrameRef.current = requestAnimationFrame(measure);
       };
 

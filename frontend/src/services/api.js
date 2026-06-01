@@ -1,5 +1,4 @@
 import axios from 'axios';
-import type { AxiosError, InternalAxiosRequestConfig } from 'axios';
 
 import { useAuthStore } from '../stores/useAuthStore';
 
@@ -18,10 +17,8 @@ const refreshApi = axios.create({
 
 api.interceptors.response.use(
   (response) => response,
-  async (error: AxiosError) => {
-    const originalRequest = error.config as
-      | (InternalAxiosRequestConfig & { _retry?: boolean })
-      | undefined;
+  async (error) => {
+    const originalRequest = error.config;
 
     if (!originalRequest) {
       return Promise.reject(error);

@@ -1,4 +1,4 @@
-export const getAqiComment = (aqi: string) => {
+export const getAqiComment = (aqi) => {
   if (aqi === '좋음') return '공기가 깨끗해 야외 활동하기 좋습니다.';
   if (aqi === '보통') return '대기질은 무난하지만 민감군은 주의하세요.';
   if (aqi === '나쁨') return '마스크 착용을 권장합니다.';

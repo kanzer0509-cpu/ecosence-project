@@ -1,4 +1,4 @@
-export const getDbComment = (db: number | null) => {
+export const getDbComment = (db) => {
   if (db === null) return '마이크 권한 허용 후 실시간 소음이 표시됩니다.';
 
   if (db < 40) return '매우 조용한 환경입니다.';

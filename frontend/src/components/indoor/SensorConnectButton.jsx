@@ -1,14 +1,8 @@
-interface SensorConnectButtonProps {
-  isConnected: boolean;
-  onConnect: () => void;
-  onDisconnect: () => void;
-}
-
 export default function SensorConnectButton({
   isConnected,
   onConnect,
   onDisconnect,
-}: SensorConnectButtonProps) {
+}) {
   return (
     <button
       type="button"
