@@ -3,18 +3,19 @@ import { useNoiseStore } from '../stores/useNoiseStore';
 import { useAudio } from '../hooks/useAudio';
 import { getDbComment } from '../utils/db';
 import NoiseChart from '../components/charts/NoiseChart';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { clearSpikes, getSpikes } from '../services/indexedDB';
 
 export default function SleepPage() {
   const { mode, isMeasuring, currentDb, setMode, spikes } = useNoiseStore();
   const { startAudio, stopAudio } = useAudio();
-  
+  const [savedSpikes, setSavedSpikes] = useState([]);
+
   useEffect(() => {
     const loadSpikes = async () => {
       try {
         const savedSpikes = await getSpikes();
-        console.log('저장된 스파이크:', savedSpikes);
+        setSavedSpikes(loadedSpikes);
       } catch (error) {
         console.error('스파이크 조회 실패:', error);
       }
@@ -25,6 +26,7 @@ export default function SleepPage() {
   const handleClearSpikes = async () => {
     try {
       await clearSpikes();
+      setSavedSpikes([]);
       alert('저장된 이상 소음 기록을 초기화했습니다.');
     } catch (error) {
       console.error('스파이크 초기화 실패:', error);
@@ -101,6 +103,24 @@ export default function SleepPage() {
             </ul>
           )}
         </div>
+      </div>
+      <div>
+        <h3>
+          저장된 이상 소음 기록
+        </h3>
+          {savedSpikes.length === 0 ? (
+        <p>
+          저장된 기록이 없습니다.
+        </p>
+        ) : (
+        <ul>
+          {savedSpikes.map((spike) => (
+          <li key={spike.id}>
+            {spike.timestamp} - {spike.db} dB
+          </li>
+        ))}
+        </ul>
+      )}
       </div>
     </section>
   );
