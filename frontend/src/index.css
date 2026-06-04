@@ -234,3 +234,47 @@ code {
     grid-template-columns: 1fr;
   }
 }
+
+.indoor-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.indoor-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.sensor-status-card {
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 16px;
+}
+
+.sensor-status-card button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 10px;
+}
+
+.indoor-chart-area {
+  min-height: 320px;
+  border: 1px dashed #cbd5e1;
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: #6b7280;
+}
+
+@media (max-width: 768px) {
+  .indoor-summary {
+    grid-template-columns: 1fr;
+  }
+}
