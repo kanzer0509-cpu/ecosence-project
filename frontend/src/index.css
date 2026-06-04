@@ -278,3 +278,38 @@ code {
     grid-template-columns: 1fr;
   }
 }
+
+.sleep-chart-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 20px;
+  min-height: 360px;
+}
+
+.sleep-top-area {
+  display: grid;
+  grid-template-columns: 1fr 240px;
+  gap: 20px;
+  align-items: start;
+}
+
+.sleep-control-card {
+  width: 100%;
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 14px;
+}
+
+.sleep-control-card button {
+  width: 100%;
+  padding: 8px;
+  margin-top: 8px;
+}
+
+@media (max-width: 768px) {
+  .sleep-top-area {
+    grid-template-columns: 1fr;
+  }
+}
