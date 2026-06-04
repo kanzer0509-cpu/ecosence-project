@@ -185,3 +185,52 @@ code {
   color: #111827;
   text-decoration: none;
 }
+
+.outdoor-layout {
+  display: grid;
+  grid-template-columns: 1fr 1.4fr;
+  gap: 20px;
+}
+
+.outdoor-info-panel,
+.outdoor-chart-card,
+.location-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.outdoor-info-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.outdoor-right-panel {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  gap: 20px;
+}
+
+.location-card input {
+  width: 100%;
+  padding: 10px;
+  margin: 12px 0;
+}
+
+.location-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.location-actions button {
+  flex: 1;
+  padding: 10px;
+}
+
+@media (max-width: 768px) {
+  .outdoor-layout {
+    grid-template-columns: 1fr;
+  }
+}

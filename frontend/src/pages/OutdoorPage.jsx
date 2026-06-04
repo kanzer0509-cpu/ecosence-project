@@ -1,10 +1,10 @@
 import { useState } from 'react';
 
 import InfoCard from '../components/common/InfoCard';
+import OutdoorChart from '../components/charts/OutdoorChart';
 import { getOutdoorData } from '../services/outdoor';
 import { useOutdoorStore } from '../stores/useOutdoorStore';
 import { getAqiComment } from '../utils/aqi';
-import OutdoorChart from '../components/charts/OutdoorChart';
 
 export default function OutdoorPage() {
   const { data, location, setLocation, setData } = useOutdoorStore();
@@ -14,9 +14,7 @@ export default function OutdoorPage() {
   const handleRefresh = async () => {
     try {
       setIsLoading(true);
-
       const outdoorData = await getOutdoorData(inputLocation);
-
       setLocation(inputLocation);
       setData(outdoorData);
     } catch (error) {
@@ -28,87 +26,83 @@ export default function OutdoorPage() {
   };
 
   const handleUseCurrentLocation = () => {
-  if (!navigator.geolocation) {
-    alert('이 브라우저에서는 위치 정보를 지원하지 않습니다.');
-    return;
-  }
-
-  navigator.geolocation.getCurrentPosition(
-    (position) => {
-      const { latitude, longitude } = position.coords;
-
-      const locationText = `${latitude},${longitude}`;
-      setInputLocation(locationText);
-      setLocation(locationText);
-    },
-    (error) => {
-      console.error('위치 정보 조회 실패:', error);
-      alert('위치 정보를 가져오지 못했습니다.');
+    if (!navigator.geolocation) {
+      alert('이 브라우저에서는 위치 정보를 지원하지 않습니다.');
+      return;
     }
-  );
-};
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude } = position.coords;
+        const locationText = `${latitude},${longitude}`;
+
+        setInputLocation(locationText);
+        setLocation(locationText);
+      },
+      (error) => {
+        console.error('위치 정보 조회 실패:', error);
+        alert('위치 정보를 가져오지 못했습니다.');
+      }
+    );
+  };
 
   const displayData = data ?? {
     temperature: 24,
+    feelsLike: 25,
     humidity: 55,
     precipitation: 0,
     uv: '보통',
     aqi: '좋음',
+    pm25: 18,
   };
 
   return (
-    <section>
-      <h2>실외 대시보드</h2>
+    <section className="outdoor-page">
+      <div className="outdoor-layout">
+        <div className="outdoor-info-panel">
+          <h2>실외 정보</h2>
 
-      <div>
-        <input
-          value={inputLocation}
-          onChange={(event) => setInputLocation(event.target.value)}
-          placeholder="지역을 입력하세요 예: 창원"
-        />
+          <InfoCard title="기온" value={`${displayData.temperature}℃`} />
+          <InfoCard title="체감온도" value={`${displayData.feelsLike ?? displayData.temperature}℃`} />
+          <InfoCard title="습도" value={`${displayData.humidity}%`} />
+          <InfoCard title="PM2.5" value={`${displayData.pm25 ?? '--'}㎍/㎥`} />
+          <InfoCard
+            title="AQI"
+            value={displayData.aqi}
+            description={getAqiComment(displayData.aqi)}
+          />
+          <InfoCard title="UV" value={displayData.uv} />
+          <InfoCard title="강수량" value={`${displayData.precipitation}mm`} />
+        </div>
 
-        <button type="button" onClick={handleUseCurrentLocation}>
-          현재 위치 사용
-        </button>
+        <div className="outdoor-right-panel">
+          <div className="outdoor-chart-card">
+            <h2>실외 환경 그래프</h2>
+            <OutdoorChart />
+          </div>
 
-        <button type="button" onClick={handleRefresh} disabled={isLoading}>
-          {isLoading ? '불러오는 중...' : '새로고침'}
-        </button>
-      </div>
+          <div className="location-card">
+            <h2>위치 설정</h2>
 
-      <p>현재 지역: {location}</p>
+            <p>현재 지역: {location}</p>
 
-      <div>
-        <InfoCard
-          title="기온"
-          value={`${displayData.temperature}℃`}
-          description="현재 지역의 기온입니다."
-        />
-        <InfoCard
-          title="습도"
-          value={`${displayData.humidity}%`}
-          description="현재 지역의 습도입니다."
-        />
-        <InfoCard
-          title="강수량"
-          value={`${displayData.precipitation}mm`}
-          description="현재 강수량입니다."
-        />
-        <InfoCard
-          title="UV"
-          value={displayData.uv}
-          description="자외선 지수입니다."
-        />
-        <InfoCard
-          title="AQI"
-          value={displayData.aqi}
-          description={getAqiComment(displayData.aqi)}
-        />
-      </div>
+            <input
+              value={inputLocation}
+              onChange={(event) => setInputLocation(event.target.value)}
+              placeholder="지역을 입력하세요 예: 창원"
+            />
 
-      <div>
-        <h3>실외 환경 변화 그래프</h3>
-        <OutdoorChart />
+            <div className="location-actions">
+              <button type="button" onClick={handleUseCurrentLocation}>
+                GPS
+              </button>
+
+              <button type="button" onClick={handleRefresh} disabled={isLoading}>
+                {isLoading ? '불러오는 중...' : '새로고침'}
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );
