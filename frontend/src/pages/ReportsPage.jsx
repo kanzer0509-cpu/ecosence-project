@@ -44,46 +44,57 @@ export default function ReportsPage() {
   };
 
   return (
-    <section>
-      <h2>보고서</h2>
+    <section className="report-page">
+      <div className="report-card">
+        <h2>환경 보고서</h2>
 
-      <p>주간 또는 월간 환경 데이터를 PDF 보고서로 다운로드합니다.</p>
+        <p>
+          주간 또는 월간 환경 데이터를 PDF 형식으로 다운로드할 수 있습니다.
+        </p>
 
-      <div>
-        <button
-          type="button"
-          onClick={() => handleDownload('weekly')}
-          disabled={isLoading}
-        >
-          주간 보고서 다운로드
-        </button>
+        <div className="report-actions">
+          <button
+            type="button"
+            onClick={() => handleDownload('weekly')}
+            disabled={isLoading}
+          >
+            주간 보고서 다운로드
+          </button>
 
-        <button
-          type="button"
-          onClick={() => handleDownload('monthly')}
-          disabled={isLoading}
-        >
-          월간 보고서 다운로드
-        </button>
-      </div>
+          <button
+            type="button"
+            onClick={() => handleDownload('monthly')}
+            disabled={isLoading}
+          >
+            월간 보고서 다운로드
+          </button>
+        </div>
 
-      {isLoading && <p>보고서를 생성하는 중입니다...</p>}
-
-      <div>
-        <h3>보고서 생성 이력</h3>
-
-        {history.length === 0 ? (
-          <p>아직 생성된 보고서 이력이 없습니다.</p>
-        ) : (
-          <ul>
-            {history.map((item, index) => (
-              <li key={item.id ?? index}>
-                {item.period ?? '기간 정보 없음'} -{' '}
-                {item.created_at ?? item.createdAt ?? '생성일 정보 없음'}
-              </li>
-            ))}
-          </ul>
+        {isLoading && (
+          <p className="report-loading">
+            보고서를 생성하는 중입니다...
+          </p>
         )}
+
+        <div className="report-history">
+          <h3>보고서 생성 이력</h3>
+
+          {history.length === 0 ? (
+            <p>아직 생성된 보고서 이력이 없습니다.</p>
+          ) : (
+            <ul>
+              {history.map((item, index) => (
+                <li key={item.id ?? index}>
+                  {item.period ?? '기간 정보 없음'}
+                  {' - '}
+                  {item.created_at ??
+                    item.createdAt ??
+                    '생성일 정보 없음'}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       </div>
     </section>
   );

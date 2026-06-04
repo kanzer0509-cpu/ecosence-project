@@ -313,3 +313,67 @@ code {
     grid-template-columns: 1fr;
   }
 }
+
+.report-page {
+  display: flex;
+  justify-content: center;
+}
+
+.report-card {
+  width: 100%;
+  max-width: 760px;
+  min-height: 480px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.report-actions {
+  display: flex;
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.report-actions button {
+  flex: 1;
+  padding: 12px;
+}
+
+.report-history {
+  margin-top: 24px;
+}
+
+.settings-page {
+  display: flex;
+  justify-content: center;
+}
+
+.settings-card {
+  width: 100%;
+  max-width: 700px;
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.setting-item {
+  margin-bottom: 24px;
+}
+
+.setting-item h3 {
+  margin-bottom: 8px;
+}
+
+.logout-button,
+.guest-actions button {
+  width: 100%;
+  padding: 12px;
+}
+
+.guest-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
