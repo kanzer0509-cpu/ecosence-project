@@ -1,7 +1,11 @@
+import { useNavigate } from 'react-router-dom';
+
 import { useAuthStore } from '../stores/useAuthStore';
 import { useOutdoorStore } from '../stores/useOutdoorStore';
 
 export default function SettingsPage() {
+  const navigate = useNavigate();
+
   const { user, isAuthenticated, logout } = useAuthStore();
   const { location } = useOutdoorStore();
 
@@ -38,8 +42,13 @@ export default function SettingsPage() {
             </div>
 
             <div className="guest-actions">
-              <button type="button">로그인</button>
-              <button type="button">회원가입</button>
+              <button type="button" onClick={() => navigate('/login')}>
+                로그인
+              </button>
+
+              <button type="button" onClick={() => navigate('/register')}>
+                회원가입
+              </button>
             </div>
           </>
         )}

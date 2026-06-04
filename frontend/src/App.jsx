@@ -11,6 +11,7 @@ import IndoorPage from './pages/IndoorPage';
 import SleepPage from './pages/SleepPage';
 import ReportsPage from './pages/ReportsPage';
 import SettingsPage from './pages/SettingsPage';
+import RegisterPage from './pages/RegisterPage';
 
 function App() {
   return (
@@ -19,7 +20,8 @@ function App() {
         <Route path="/" element={<StartPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/main" element={<MainPage />} />
-
+        <Route path="/register" element={<RegisterPage />} />
+        
         <Route
           path="/outdoor"
           element={

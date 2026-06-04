@@ -1,24 +1,22 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { login } from '../services/auth';
-import { useAuthStore } from '../stores/useAuthStore';
+import { register } from '../services/auth';
 
-export default function LoginPage() {
+export default function RegisterPage() {
   const navigate = useNavigate();
-  const { login: setLogin } = useAuthStore();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = async () => {
+  const handleRegister = async () => {
     try {
-      await login({ email, password });
-      setLogin({ email });
-      navigate('/main');
+      await register({ email, password });
+      alert('회원가입이 완료되었습니다.');
+      navigate('/login');
     } catch (error) {
-      console.error('로그인 실패:', error);
-      alert('로그인에 실패했습니다.');
+      console.error('회원가입 실패:', error);
+      alert('회원가입에 실패했습니다.');
     }
   };
 
@@ -46,16 +44,12 @@ export default function LoginPage() {
           />
         </label>
 
-        <button type="button" onClick={handleLogin}>
-          로그인
+        <button type="button" onClick={handleRegister}>
+          회원가입
         </button>
 
-        <button type="button" onClick={() => navigate('/main')}>
-          비회원으로 시작
-        </button>
-
-        <button type="button" onClick={() => navigate('/register')}>
-          회원가입 하러가기
+        <button type="button" onClick={() => navigate('/login')}>
+          로그인 하러가기
         </button>
       </div>
     </section>
