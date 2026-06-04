@@ -1,11 +1,20 @@
-export default function Layout({ children }) {
-  return (
-    <div>
-      <header>
-        <h1>EcoSense</h1>
-      </header>
+import { useState } from 'react';
+import Header from './Header';
+import SideMenu from './SideMenu';
 
-      <main>{children}</main>
+export default function Layout({ children }) {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  return (
+    <div className="app">
+      <Header title="" onMenuClick={() => setIsMenuOpen(true)} />
+
+      <main className="app-main">{children}</main>
+
+      <SideMenu
+        isOpen={isMenuOpen}
+        onClose={() => setIsMenuOpen(false)}
+      />
     </div>
   );
 }

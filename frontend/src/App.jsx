@@ -1,8 +1,5 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-
-import BottomTabBar from './components/layout/BottomTabBar';
 import Layout from './components/layout/Layout';
-
 import OutdoorPage from './pages/OutdoorPage';
 import IndoorPage from './pages/IndoorPage';
 import SleepPage from './pages/SleepPage';
@@ -21,8 +18,6 @@ function App() {
           <Route path="/reports" element={<ReportsPage />} />
           <Route path="/settings" element={<SettingsPage />} />
         </Routes>
-
-        <BottomTabBar />
       </Layout>
     </BrowserRouter>
   );

@@ -109,3 +109,79 @@ code {
   padding: 4px 8px;
   background: var(--code-bg);
 }
+
+.app {
+  min-height: 100vh;
+  background: #f5f7fb;
+  color: #111827;
+}
+
+.app-main {
+  padding: 20px;
+}
+
+.page-header {
+  position: relative;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #e5e7eb;
+  background: white;
+}
+
+.page-title {
+  position: absolute;
+  left: 16px;
+  font-weight: 700;
+}
+
+.app-logo {
+  margin: 0;
+  font-size: 22px;
+}
+
+.menu-button {
+  position: absolute;
+  right: 16px;
+  border: none;
+  background: transparent;
+  font-size: 24px;
+}
+
+.side-menu-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 100;
+}
+
+.side-menu {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 220px;
+  height: 100vh;
+  background: white;
+  padding: 20px;
+  box-shadow: -4px 0 16px rgba(0, 0, 0, 0.15);
+}
+
+.side-menu-close {
+  border: none;
+  background: transparent;
+  font-size: 28px;
+  margin-bottom: 24px;
+}
+
+.side-menu-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  font-size: 18px;
+}
+
+.side-menu-nav a {
+  color: #111827;
+  text-decoration: none;
+}
