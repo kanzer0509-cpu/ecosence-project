@@ -33,5 +33,14 @@ export default function NoiseChart() {
     ],
   };
 
-  return <Line data={data} />;
+  const options = {
+    scales: {
+      y: {
+        min: 20,
+        max: 100,
+      },
+    },
+  };
+
+  return <Line data={data} options={options} />;
 }
