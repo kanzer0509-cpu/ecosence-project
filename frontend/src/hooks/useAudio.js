@@ -6,13 +6,21 @@ export const useAudio = () => {
   const audioContextRef = useRef(null);
   const analyserRef = useRef(null);
   const animationFrameRef = useRef(null);
+  const lastSpikeTimeRef = useRef(0);
+  const lastGraphUpdateRef = useRef(0);
 
   const { startMeasuring, stopMeasuring, setCurrentDb, addSpike } =
     useNoiseStore();
 
   const startAudio = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const stream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          echoCancellation: false,
+          noiseSuppression: false,
+          autoGainControl: false,
+        },
+      });
 
       const audioContext = new AudioContext();
       const source = audioContext.createMediaStreamSource(stream);
@@ -26,25 +34,37 @@ export const useAudio = () => {
 
       startMeasuring();
 
-      const dataArray = new Uint8Array(analyser.fftSize);
+      const dataArray = new Float32Array(analyser.fftSize);
 
       const measure = () => {
-        analyser.getByteTimeDomainData(dataArray);
+        analyser.getFloatTimeDomainData(dataArray);
 
         let sum = 0;
+        let peak = 0;
 
         for (const value of dataArray) {
-          const normalized = (value - 128) / 128;
-          sum += normalized * normalized;
+          sum += value * value;
+          peak = Math.max(peak, Math.abs(value));
         }
 
         const rms = Math.sqrt(sum / dataArray.length);
-        const db = 20 * Math.log10(rms || 0.00001) + 100;
-        const currentDb = Math.max(0, db);
+        const relativeDb = 20 * Math.log10(rms || 0.00001);
 
-        setCurrentDb(currentDb);
+        const currentDb = Math.max(0, Math.min(100, relativeDb + 100));
 
-        if (currentDb >= 70) {
+        const now = Date.now();
+
+        if (now - lastGraphUpdateRef.current > 200) {
+          setCurrentDb(currentDb);
+          lastGraphUpdateRef.current = now;
+        }
+
+        const isSpike = currentDb >= 70 || peak >= 0.35;
+        const canSaveSpike = now - lastSpikeTimeRef.current > 2000;
+
+        if (isSpike && canSaveSpike) {
+          lastSpikeTimeRef.current = now;
+
           const spike = {
             timestamp: new Date().toLocaleTimeString(),
             db: Number(currentDb.toFixed(1)),

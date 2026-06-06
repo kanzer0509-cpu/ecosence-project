@@ -24,7 +24,7 @@ export const useNoiseStore = create((set) => ({
   setCurrentDb: (db) =>
     set((state) => ({
       currentDb: db,
-      history: [...state.history, db].slice(-30),
+      history: [...state.history, db].slice(-120),
     })),
 
   clearHistory: () =>
