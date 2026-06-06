@@ -6,16 +6,17 @@ export default function StartPage() {
   return (
     <section className="start-page">
       <div className="start-card">
-        <h1>EcoSense</h1>
-        <p>환경 모니터링 IoT 대시보드</p>
+        <img src="/images/logo.png" alt="EcoSense" className="start-logo" />
 
-        <button type="button" onClick={() => navigate('/login')}>
-          로그인
-        </button>
+        <div className="start-actions">
+          <button type="button" onClick={() => navigate('/login')}>
+            <img src="/images/login.png" alt="로그인" />
+          </button>
 
-        <button type="button" onClick={() => navigate('/main')}>
-          비회원으로 시작
-        </button>
+          <button type="button" onClick={() => navigate('/main')}>
+            <img src="/images/guest.png" alt="게스트 모드" />
+          </button>
+        </div>
       </div>
     </section>
   );

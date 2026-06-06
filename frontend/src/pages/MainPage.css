@@ -1,0 +1,43 @@
+.main-card {
+  max-width: 620px;
+  padding: 36px;
+}
+
+.main-logo {
+  width: 340px;
+  margin: 0 auto 32px;
+}
+
+.main-menu-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 0.85fr;
+  gap: 20px;
+}
+
+.menu-image-button {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  box-shadow: none;
+}
+
+.menu-image-button img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+.menu-image-button:not(.menu-settings) {
+  height: 180px;
+}
+
+.menu-settings {
+  grid-row: span 2;
+}
+
+.menu-settings img {
+  height: 380px;
+  object-fit: contain;
+}

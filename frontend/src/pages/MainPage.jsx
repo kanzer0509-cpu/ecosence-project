@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import './MainPage.css';
 
 export default function MainPage() {
   const navigate = useNavigate();
@@ -6,28 +7,50 @@ export default function MainPage() {
   return (
     <section className="main-page">
       <div className="main-card">
-        <h1>EcoSense</h1>
+
+        <img
+          src="/images/logo.png"
+          alt="EcoSense"
+          className="main-logo"
+        />
 
         <div className="main-menu-grid">
-          <button type="button" onClick={() => navigate('/outdoor')}>
-            실외
+
+          <button
+            className="menu-image-button"
+            onClick={() => navigate('/outdoor')}
+          >
+            <img src="/images/outdoor.png" alt="실외" />
           </button>
 
-          <button type="button" onClick={() => navigate('/indoor')}>
-            실내
+          <button
+            className="menu-image-button"
+            onClick={() => navigate('/indoor')}
+          >
+            <img src="/images/indoor.png" alt="실내" />
           </button>
 
-          <button type="button" onClick={() => navigate('/settings')}>
-            설정
+          <button
+            className="menu-image-button menu-settings"
+            onClick={() => navigate('/settings')}
+          >
+            <img src="/images/settings.png" alt="설정" />
           </button>
 
-          <button type="button" onClick={() => navigate('/sleep')}>
-            수면/소음
+          <button
+            className="menu-image-button"
+            onClick={() => navigate('/sleep')}
+          >
+            <img src="/images/sleep.png" alt="수면/소음" />
           </button>
 
-          <button type="button" onClick={() => navigate('/reports')}>
-            보고서
+          <button
+            className="menu-image-button"
+            onClick={() => navigate('/reports')}
+          >
+            <img src="/images/report.png" alt="보고서" />
           </button>
+
         </div>
       </div>
     </section>
