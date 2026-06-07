@@ -6,7 +6,7 @@ import NoiseChart from '../components/charts/NoiseChart';
 import { useAudio } from '../hooks/useAudio';
 import { clearSpikes, getSpikes } from '../services/indexedDB';
 import { useNoiseStore } from '../stores/useNoiseStore';
-import { getDbComment } from '../utils/db';
+import { getNoiseComment } from '../utils/comment';
 
 export default function SleepPage() {
   const { mode, isMeasuring, currentDb, setMode, spikes } = useNoiseStore();
@@ -56,7 +56,11 @@ export default function SleepPage() {
                     ? '-- dB'
                     : `${currentDb.toFixed(1)} dB`
                 }
-                description={getDbComment(currentDb)}
+                description={
+                  currentDb === null
+                    ? '마이크 권한 허용 후 실시간 소음이 표시됩니다.'
+                    : getNoiseComment(currentDb)
+                }
               />
             </div>
 

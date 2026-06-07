@@ -5,6 +5,14 @@ import OutdoorChart from '../components/charts/OutdoorChart';
 import { getOutdoorData } from '../services/outdoor';
 import { useOutdoorStore } from '../stores/useOutdoorStore';
 import { getAqiComment } from '../utils/aqi';
+import {
+  getFeelsLikeComment,
+  getHumidityComment,
+  getPm25Comment,
+  getRainComment,
+  getTemperatureComment,
+  getUvComment,
+} from '../utils/comment';
 
 export default function OutdoorPage() {
   const { data, location, setLocation, setData } = useOutdoorStore();
@@ -51,7 +59,7 @@ export default function OutdoorPage() {
     feelsLike: 25,
     humidity: 55,
     precipitation: 0,
-    uv: '보통',
+    uv: 4,
     aqi: '좋음',
     pm25: 18,
   };
@@ -62,17 +70,53 @@ export default function OutdoorPage() {
         <div className="outdoor-info-panel">
           <h2>실외 정보</h2>
 
-          <InfoCard title="기온" value={`${displayData.temperature}℃`} />
-          <InfoCard title="체감온도" value={`${displayData.feelsLike ?? displayData.temperature}℃`} />
-          <InfoCard title="습도" value={`${displayData.humidity}%`} />
-          <InfoCard title="PM2.5" value={`${displayData.pm25 ?? '--'}㎍/㎥`} />
+          <InfoCard
+            title="기온"
+            value={`${displayData.temperature}℃`}
+            description={getTemperatureComment(displayData.temperature)}
+          />
+
+          <InfoCard
+            title="체감온도"
+            value={`${displayData.feelsLike ?? displayData.temperature}℃`}
+            description={getFeelsLikeComment(
+              displayData.feelsLike ?? displayData.temperature
+            )}
+          />
+
+          <InfoCard
+            title="습도"
+            value={`${displayData.humidity}%`}
+            description={getHumidityComment(displayData.humidity)}
+          />
+
+          <InfoCard
+            title="PM2.5"
+            value={`${displayData.pm25 ?? '--'}㎍/㎥`}
+            description={
+              displayData.pm25 === undefined
+                ? '초미세먼지 정보를 확인 중입니다.'
+                : getPm25Comment(displayData.pm25)
+            }
+          />
+
           <InfoCard
             title="AQI"
             value={displayData.aqi}
             description={getAqiComment(displayData.aqi)}
           />
-          <InfoCard title="UV" value={displayData.uv} />
-          <InfoCard title="강수량" value={`${displayData.precipitation}mm`} />
+
+          <InfoCard
+            title="UV"
+            value={displayData.uv}
+            description={getUvComment(Number(displayData.uv))}
+          />
+
+          <InfoCard
+            title="강수량"
+            value={`${displayData.precipitation}mm`}
+            description={getRainComment(displayData.precipitation)}
+          />
         </div>
 
         <div className="outdoor-right-panel">
