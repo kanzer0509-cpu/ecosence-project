@@ -464,7 +464,7 @@ code {
 .start-actions {
   display: flex;
   justify-content: center;
-  gap: 24px;
+  gap: 20px;
   margin-top: 30px;
 }
 
@@ -472,9 +472,10 @@ code {
   border: none;
   background: transparent;
   padding: 0;
+  cursor: pointer;
 }
 
 .start-actions img {
-  width: 220px;
+  width: 140px;
   object-fit: contain;
 }

@@ -13,6 +13,10 @@ export default function StartPage() {
             <img src="/images/login.png" alt="로그인" />
           </button>
 
+          <button onClick={() => navigate('/register')}>
+            <img src="/images/register.png" alt="회원가입" />
+          </button>
+
           <button type="button" onClick={() => navigate('/main')}>
             <img src="/images/guest.png" alt="게스트 모드" />
           </button>
