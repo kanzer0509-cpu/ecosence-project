@@ -1,6 +1,7 @@
 import { useRef } from 'react';
 import { saveRecording, saveSpike } from '../services/indexedDB';
 import { useNoiseStore } from '../stores/useNoiseStore';
+import { saveSpikeToSession } from '../services/session';
 
 export const useAudio = () => {
   const audioContextRef = useRef(null);
@@ -90,6 +91,8 @@ export const useAudio = () => {
       analyserRef.current = analyser;
 
       startMeasuring();
+      const sessionId = `session-${Date.now()}`;
+      localStorage.setItem('currentSessionId', sessionId);
 
       const dataArray = new Float32Array(analyser.fftSize);
 
@@ -133,6 +136,18 @@ export const useAudio = () => {
             console.error('스파이크 저장 실패:', error);
           });
 
+          const sessionId = localStorage.getItem('currentSessionId');
+
+          if (sessionId) {
+            saveSpikeToSession(sessionId, {
+              detected_at: spike.createdAt,
+              db_level: spike.db,
+              duration_sec: 10,
+            }).catch((error) => {
+              console.error('서버 스파이크 저장 실패:', error);
+            });
+          }
+
           startSpikeRecording(spike);
         }
 
@@ -167,6 +182,8 @@ export const useAudio = () => {
     isRecordingRef.current = false;
 
     stopMeasuring();
+
+    localStorage.removeItem('currentSessionId');
   };
 
   return {

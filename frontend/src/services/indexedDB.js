@@ -101,3 +101,17 @@ export const clearRecordings = async () => {
     request.onerror = () => reject(request.error);
   });
 };
+
+export const getLocalSyncData = async () => {
+  const spikes = await getSpikes();
+
+  return {
+    sessions: [],
+    spikes: spikes.map((spike) => ({
+      client_id: spike.createdAt,
+      detected_at: spike.createdAt,
+      db_level: spike.db,
+      duration_sec: 10,
+    })),
+  };
+};

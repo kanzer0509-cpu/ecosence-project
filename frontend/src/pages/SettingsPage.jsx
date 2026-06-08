@@ -2,12 +2,27 @@ import { useNavigate } from 'react-router-dom';
 
 import { useAuthStore } from '../stores/useAuthStore';
 import { useOutdoorStore } from '../stores/useOutdoorStore';
+import { getLocalSyncData } from '../services/indexedDB';
+import { uploadSyncData } from '../services/sync';
 
 export default function SettingsPage() {
   const navigate = useNavigate();
 
   const { user, isAuthenticated, logout } = useAuthStore();
   const { location } = useOutdoorStore();
+
+  const handleSyncUpload = async () => {
+    try {
+      const data = await getLocalSyncData();
+      const result = await uploadSyncData(data);
+
+      console.log('동기화 결과:', result);
+      alert('로컬 데이터 동기화가 완료되었습니다.');
+    } catch (error) {
+      console.error('동기화 실패:', error);
+      alert('동기화에 실패했습니다.');
+    }
+  };
 
   return (
     <section className="settings-page">
@@ -25,6 +40,10 @@ export default function SettingsPage() {
               <h3>현재 지역</h3>
               <p>{location}</p>
             </div>
+
+            <button type="button" onClick={handleSyncUpload}>
+              로컬 데이터 동기화
+            </button>
 
             <button
               type="button"
