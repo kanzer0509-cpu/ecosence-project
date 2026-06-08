@@ -4,7 +4,7 @@ import InfoCard from '../components/common/InfoCard';
 import NoiseChart from '../components/charts/NoiseChart';
 
 import { useAudio } from '../hooks/useAudio';
-import { clearSpikes, getSpikes } from '../services/indexedDB';
+import { clearSpikes, getSpikes, clearRecordings,  getRecordings } from '../services/indexedDB';
 import { useNoiseStore } from '../stores/useNoiseStore';
 import { getNoiseComment } from '../utils/comment';
 
@@ -13,12 +13,15 @@ export default function SleepPage() {
   const { startAudio, stopAudio } = useAudio();
 
   const [savedSpikes, setSavedSpikes] = useState([]);
+  const [recordings, setRecordings] = useState([]);
 
   useEffect(() => {
     const loadSpikes = async () => {
       try {
         const loadedSpikes = await getSpikes();
+        const loadedRecordings = await getRecordings();
         setSavedSpikes(loadedSpikes);
+        setRecordings(loadedRecordings);
       } catch (error) {
         console.error('스파이크 조회 실패:', error);
       }
@@ -30,7 +33,9 @@ export default function SleepPage() {
   const handleClearSpikes = async () => {
     try {
       await clearSpikes();
+      await clearRecordings();
       setSavedSpikes([]);
+      setRecordings([]);
 
       alert('저장된 이상 소음 기록을 초기화했습니다.');
     } catch (error) {
@@ -147,6 +152,29 @@ export default function SleepPage() {
               </ul>
             )}
           </div>
+        </div>
+
+        <div className="recording-card">
+          <h3>녹음 파일 목록</h3>
+
+          {recordings.length === 0 ? (
+            <p>저장된 녹음 파일이 없습니다.</p>
+          ) : (
+            <ul>
+              {recordings.map((recording) => (
+                <li key={recording.id}>
+                  <p>
+                    {recording.timestamp} - {recording.db} dB
+                  </p>
+
+                  <audio
+                    controls
+                    src={URL.createObjectURL(recording.blob)}
+                  />
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
 
         <button

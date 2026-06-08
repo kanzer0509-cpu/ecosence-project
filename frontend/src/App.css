@@ -182,3 +182,15 @@
     border-right-color: var(--border);
   }
 }
+
+.recording-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.recording-card audio {
+  width: 100%;
+  margin-top: 8px;
+}

@@ -1,6 +1,7 @@
 const DB_NAME = 'ecosense-db';
-const DB_VERSION = 1;
-const STORE_NAME = 'spikes';
+const DB_VERSION = 2;
+const SPIKE_STORE = 'spikes';
+const RECORDING_STORE = 'recordings';
 
 export const openDatabase = () => {
   return new Promise((resolve, reject) => {
@@ -9,8 +10,15 @@ export const openDatabase = () => {
     request.onupgradeneeded = () => {
       const db = request.result;
 
-      if (!db.objectStoreNames.contains(STORE_NAME)) {
-        db.createObjectStore(STORE_NAME, {
+      if (!db.objectStoreNames.contains(SPIKE_STORE)) {
+        db.createObjectStore(SPIKE_STORE, {
+          keyPath: 'id',
+          autoIncrement: true,
+        });
+      }
+
+      if (!db.objectStoreNames.contains(RECORDING_STORE)) {
+        db.createObjectStore(RECORDING_STORE, {
           keyPath: 'id',
           autoIncrement: true,
         });
@@ -26,8 +34,8 @@ export const saveSpike = async (spike) => {
   const db = await openDatabase();
 
   return new Promise((resolve, reject) => {
-    const transaction = db.transaction(STORE_NAME, 'readwrite');
-    const request = transaction.objectStore(STORE_NAME).add(spike);
+    const transaction = db.transaction(SPIKE_STORE, 'readwrite');
+    const request = transaction.objectStore(SPIKE_STORE).add(spike);
 
     request.onsuccess = () => resolve();
     request.onerror = () => reject(request.error);
@@ -38,8 +46,8 @@ export const getSpikes = async () => {
   const db = await openDatabase();
 
   return new Promise((resolve, reject) => {
-    const transaction = db.transaction(STORE_NAME, 'readonly');
-    const request = transaction.objectStore(STORE_NAME).getAll();
+    const transaction = db.transaction(SPIKE_STORE, 'readonly');
+    const request = transaction.objectStore(SPIKE_STORE).getAll();
 
     request.onsuccess = () => resolve(request.result);
     request.onerror = () => reject(request.error);
@@ -50,8 +58,44 @@ export const clearSpikes = async () => {
   const db = await openDatabase();
 
   return new Promise((resolve, reject) => {
-    const transaction = db.transaction(STORE_NAME, 'readwrite');
-    const request = transaction.objectStore(STORE_NAME).clear();
+    const transaction = db.transaction(SPIKE_STORE, 'readwrite');
+    const request = transaction.objectStore(SPIKE_STORE).clear();
+
+    request.onsuccess = () => resolve();
+    request.onerror = () => reject(request.error);
+  });
+};
+
+export const saveRecording = async (recording) => {
+  const db = await openDatabase();
+
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(RECORDING_STORE, 'readwrite');
+    const request = transaction.objectStore(RECORDING_STORE).add(recording);
+
+    request.onsuccess = () => resolve();
+    request.onerror = () => reject(request.error);
+  });
+};
+
+export const getRecordings = async () => {
+  const db = await openDatabase();
+
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(RECORDING_STORE, 'readonly');
+    const request = transaction.objectStore(RECORDING_STORE).getAll();
+
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
+};
+
+export const clearRecordings = async () => {
+  const db = await openDatabase();
+
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction(RECORDING_STORE, 'readwrite');
+    const request = transaction.objectStore(RECORDING_STORE).clear();
 
     request.onsuccess = () => resolve();
     request.onerror = () => reject(request.error);

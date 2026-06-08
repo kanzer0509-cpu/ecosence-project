@@ -1,16 +1,71 @@
 import { useRef } from 'react';
-import { saveSpike } from '../services/indexedDB';
+import { saveRecording, saveSpike } from '../services/indexedDB';
 import { useNoiseStore } from '../stores/useNoiseStore';
 
 export const useAudio = () => {
   const audioContextRef = useRef(null);
   const analyserRef = useRef(null);
   const animationFrameRef = useRef(null);
+
+  const mediaStreamRef = useRef(null);
+  const mediaRecorderRef = useRef(null);
+  const recordedChunksRef = useRef([]);
+  const isRecordingRef = useRef(false);
+
   const lastSpikeTimeRef = useRef(0);
   const lastGraphUpdateRef = useRef(0);
 
   const { startMeasuring, stopMeasuring, setCurrentDb, addSpike } =
     useNoiseStore();
+
+  const startSpikeRecording = (spike) => {
+    if (!mediaStreamRef.current || isRecordingRef.current) return;
+
+    recordedChunksRef.current = [];
+
+    const recorder = new MediaRecorder(mediaStreamRef.current);
+    mediaRecorderRef.current = recorder;
+    isRecordingRef.current = true;
+
+    recorder.ondataavailable = (event) => {
+      if (event.data.size > 0) {
+        recordedChunksRef.current.push(event.data);
+      }
+    };
+
+    recorder.onstop = async () => {
+      const blob = new Blob(recordedChunksRef.current, {
+        type: 'audio/webm',
+      });
+
+      const recording = {
+        spikeId: spike.createdAt,
+        timestamp: spike.timestamp,
+        db: spike.db,
+        blob,
+        durationSec: 10,
+        createdAt: new Date().toISOString(),
+      };
+
+      try {
+        await saveRecording(recording);
+        console.log('녹음 저장 완료:', recording);
+      } catch (error) {
+        console.error('녹음 저장 실패:', error);
+      } finally {
+        recordedChunksRef.current = [];
+        isRecordingRef.current = false;
+      }
+    };
+
+    recorder.start();
+
+    setTimeout(() => {
+      if (recorder.state !== 'inactive') {
+        recorder.stop();
+      }
+    }, 10000);
+  };
 
   const startAudio = async () => {
     try {
@@ -21,6 +76,8 @@ export const useAudio = () => {
           autoGainControl: false,
         },
       });
+
+      mediaStreamRef.current = stream;
 
       const audioContext = new AudioContext();
       const source = audioContext.createMediaStreamSource(stream);
@@ -49,7 +106,6 @@ export const useAudio = () => {
 
         const rms = Math.sqrt(sum / dataArray.length);
         const relativeDb = 20 * Math.log10(rms || 0.00001);
-
         const currentDb = Math.max(0, Math.min(100, relativeDb + 100));
 
         const now = Date.now();
@@ -76,6 +132,8 @@ export const useAudio = () => {
           saveSpike(spike).catch((error) => {
             console.error('스파이크 저장 실패:', error);
           });
+
+          startSpikeRecording(spike);
         }
 
         animationFrameRef.current = requestAnimationFrame(measure);
@@ -93,11 +151,20 @@ export const useAudio = () => {
       cancelAnimationFrame(animationFrameRef.current);
     }
 
+    if (mediaRecorderRef.current?.state === 'recording') {
+      mediaRecorderRef.current.stop();
+    }
+
+    mediaStreamRef.current?.getTracks().forEach((track) => track.stop());
+
     audioContextRef.current?.close();
 
     audioContextRef.current = null;
     analyserRef.current = null;
     animationFrameRef.current = null;
+    mediaStreamRef.current = null;
+    mediaRecorderRef.current = null;
+    isRecordingRef.current = false;
 
     stopMeasuring();
   };
