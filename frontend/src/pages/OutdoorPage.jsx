@@ -5,6 +5,7 @@ import OutdoorChart from '../components/charts/OutdoorChart';
 import { getOutdoorData } from '../services/outdoor';
 import { useOutdoorStore } from '../stores/useOutdoorStore';
 import { getAqiComment } from '../utils/aqi';
+import { searchLocations } from '../services/location';
 import {
   getFeelsLikeComment,
   getHumidityComment,
@@ -18,7 +19,46 @@ export default function OutdoorPage() {
   const { data, location, setLocation, setData } = useOutdoorStore();
   const [inputLocation, setInputLocation] = useState(location);
   const [isLoading, setIsLoading] = useState(false);
+  const [searchResults, setSearchResults] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
 
+  const handleSearchLocation = async () => {
+    if (!inputLocation.trim()) {
+      alert('검색할 지역을 입력하세요.');
+      return;
+    }
+
+    try {
+      setIsSearching(true);
+      const results = await searchLocations(inputLocation);
+      setSearchResults(Array.isArray(results) ? results : []);
+    } catch (error) {
+      console.error('지역 검색 실패:', error);
+      alert('지역 검색에 실패했습니다.');
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  const handleSelectLocation = async (selectedLocation) => {
+    const locationName = selectedLocation.name;
+
+    setInputLocation(locationName);
+    setLocation(locationName);
+    setSearchResults([]);
+
+    try {
+      setIsLoading(true);
+
+      const outdoorData = await getOutdoorData(locationName);
+      setData(outdoorData);
+    } catch (error) {
+      console.error('선택 지역 데이터 조회 실패:', error);
+      alert('선택한 지역의 실외 데이터를 불러오지 못했습니다.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
   const handleRefresh = async () => {
     try {
       setIsLoading(true);
@@ -137,6 +177,9 @@ export default function OutdoorPage() {
             />
 
             <div className="location-actions">
+              <button type="button" onClick={handleSearchLocation} disabled={isSearching}>
+                {isSearching ? '검색 중...' : '지역 검색'}
+              </button>
               <button type="button" onClick={handleUseCurrentLocation}>
                 GPS
               </button>
@@ -145,6 +188,17 @@ export default function OutdoorPage() {
                 {isLoading ? '불러오는 중...' : '새로고침'}
               </button>
             </div>
+            {searchResults.length > 0 && (
+              <ul className="location-result-list">
+                {searchResults.map((item, index) => (
+                  <li key={`${item.name}-${index}`}>
+                    <button type="button" onClick={() => handleSelectLocation(item)}>
+                      {item.name}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         </div>
       </div>

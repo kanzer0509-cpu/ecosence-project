@@ -117,3 +117,22 @@ button:disabled {
   width: 100%;
   margin-top: 10px;
 }
+
+.location-result-list {
+  list-style: none;
+  padding: 0;
+  margin: 12px 0 0;
+}
+
+.location-result-list li {
+  margin-bottom: 8px;
+}
+
+.location-result-list button {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  background: #f8fafc;
+  text-align: left;
+}
