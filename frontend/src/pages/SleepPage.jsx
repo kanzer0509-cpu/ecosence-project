@@ -46,144 +46,145 @@ export default function SleepPage() {
 
   return (
     <section className="sleep-page">
-      <div className="sleep-layout">
-        <div className="sleep-chart-card">
-          <div className="sleep-top-area">
-            <div>
-              <h2>소음 변화 그래프</h2>
+      <div className="page-container">
+        <div className="sleep-layout">
+          <div className="sleep-chart-card">
+            <div className="sleep-top-area">
+              <div>
+                <h2>📈 소음 변화 그래프</h2>
 
-              <NoiseChart />
+                <NoiseChart />
 
-              <InfoCard
-                title="현재 소음"
-                value={
-                  currentDb === null
-                    ? '-- dB'
-                    : `${currentDb.toFixed(1)} dB`
-                }
-                description={
-                  currentDb === null
-                    ? '마이크 권한 허용 후 실시간 소음이 표시됩니다.'
-                    : getNoiseComment(currentDb)
-                }
-              />
-            </div>
-
-            <div className="sleep-control-card">
-              <h3>측정 제어</h3>
-
-              <div className="mode-buttons">
-                <button
-                  type="button"
-                  onClick={() => setMode('normal')}
-                  disabled={isMeasuring}
-                >
-                  일반 소음 측정
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setMode('sleep')}
-                  disabled={isMeasuring}
-                >
-                  수면 소음 측정
-                </button>
+                <InfoCard
+                  title="현재 소음"
+                  value={
+                    currentDb === null
+                      ? '-- dB'
+                      : `${currentDb.toFixed(1)} dB`
+                  }
+                  description={
+                    currentDb === null
+                      ? '마이크 권한 허용 후 실시간 소음이 표시됩니다.'
+                      : getNoiseComment(currentDb)
+                  }
+                />
               </div>
 
-              <p>
-                현재 모드:
-                {mode === 'normal'
-                  ? ' 일반 소음 측정'
-                  : ' 수면 소음 측정'}
-              </p>
+              <div className="sleep-control-card">
+                <h3>🎛️ 측정 제어</h3>
 
-              <button
-                type="button"
-                onClick={startAudio}
-                disabled={isMeasuring}
-              >
-                {mode === 'normal'
-                  ? '일반 소음 측정 시작'
-                  : '수면 소음 측정 시작'}
-              </button>
+                <div className="mode-buttons">
+                  <button
+                    type="button"
+                    onClick={() => setMode('normal')}
+                    disabled={isMeasuring}
+                  >
+                    일반 소음 측정
+                  </button>
 
-              <button
-                type="button"
-                onClick={stopAudio}
-                disabled={!isMeasuring}
-              >
-                {mode === 'normal'
-                  ? '일반 소음 측정 종료'
-                  : '수면 소음 측정 종료'}
-              </button>
+                  <button
+                    type="button"
+                    onClick={() => setMode('sleep')}
+                    disabled={isMeasuring}
+                  >
+                    수면 소음 측정
+                  </button>
+                </div>
+
+                <div className="status-badge">
+                  {mode === 'normal'
+                    ? '일반 소음 측정'
+                    : '수면 소음 측정'}
+                </div>
+
+                <button
+                  type="button"
+                  onClick={startAudio}
+                  disabled={isMeasuring}
+                >
+                  {mode === 'normal'
+                    ? '일반 소음 측정 시작'
+                    : '수면 소음 측정 시작'}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={stopAudio}
+                  disabled={!isMeasuring}
+                >
+                  {mode === 'normal'
+                    ? '일반 소음 측정 종료'
+                    : '수면 소음 측정 종료'}
+                </button>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="spike-grid">
-          <div className="spike-card">
-            <h3>감지된 스파이크</h3>
+          <div className="spike-grid">
+            <div className="spike-card">
+              <h3>⚠️ 감지된 스파이크</h3>
 
-            {spikes.length === 0 ? (
-              <p>감지된 이상 소음이 없습니다.</p>
+              {spikes.length === 0 ? (
+                <p>감지된 이상 소음이 없습니다.</p>
+              ) : (
+                <ul>
+                  {spikes.map((spike, index) => (
+                    <li key={index}>
+                      {spike.timestamp} - {spike.db} dB
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+
+            <div className="spike-card">
+              <h3>💾 저장된 스파이크 기록</h3>
+
+              {savedSpikes.length === 0 ? (
+                <p>저장된 기록이 없습니다.</p>
+              ) : (
+                <ul>
+                  {savedSpikes.map((spike) => (
+                    <li key={spike.id}>
+                      {spike.timestamp} - {spike.db} dB
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </div>
+
+          <div className="recording-card">
+            <h3>🎙️ 녹음 파일 목록</h3>
+
+            {recordings.length === 0 ? (
+              <p>저장된 녹음 파일이 없습니다.</p>
             ) : (
               <ul>
-                {spikes.map((spike, index) => (
-                  <li key={index}>
-                    {spike.timestamp} - {spike.db} dB
+                {recordings.map((recording) => (
+                  <li key={recording.id}>
+                    <p>
+                      {recording.timestamp} - {recording.db} dB
+                    </p>
+
+                    <audio
+                      controls
+                      src={URL.createObjectURL(recording.blob)}
+                    />
                   </li>
                 ))}
               </ul>
             )}
           </div>
 
-          <div className="spike-card">
-            <h3>저장된 스파이크 기록</h3>
-
-            {savedSpikes.length === 0 ? (
-              <p>저장된 기록이 없습니다.</p>
-            ) : (
-              <ul>
-                {savedSpikes.map((spike) => (
-                  <li key={spike.id}>
-                    {spike.timestamp} - {spike.db} dB
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
+          <button
+            type="button"
+            className="clear-spikes-button"
+            onClick={handleClearSpikes}
+          >
+            이상 소음 기록 초기화
+          </button>
         </div>
-
-        <div className="recording-card">
-          <h3>녹음 파일 목록</h3>
-
-          {recordings.length === 0 ? (
-            <p>저장된 녹음 파일이 없습니다.</p>
-          ) : (
-            <ul>
-              {recordings.map((recording) => (
-                <li key={recording.id}>
-                  <p>
-                    {recording.timestamp} - {recording.db} dB
-                  </p>
-
-                  <audio
-                    controls
-                    src={URL.createObjectURL(recording.blob)}
-                  />
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-
-        <button
-          type="button"
-          className="clear-spikes-button"
-          onClick={handleClearSpikes}
-        >
-          이상 소음 기록 초기화
-        </button>
       </div>
     </section>
   );

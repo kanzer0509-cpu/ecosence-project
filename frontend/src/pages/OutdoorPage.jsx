@@ -106,99 +106,101 @@ export default function OutdoorPage() {
 
   return (
     <section className="outdoor-page">
-      <div className="outdoor-layout">
-        <div className="outdoor-info-panel">
-          <h2>실외 정보</h2>
+      <div className="page-container">
+        <div className="outdoor-layout">
+          <div className="outdoor-info-panel">
+            <h2>현재 실외 정보</h2>
 
-          <InfoCard
-            title="기온"
-            value={`${displayData.temperature}℃`}
-            description={getTemperatureComment(displayData.temperature)}
-          />
-
-          <InfoCard
-            title="체감온도"
-            value={`${displayData.feelsLike ?? displayData.temperature}℃`}
-            description={getFeelsLikeComment(
-              displayData.feelsLike ?? displayData.temperature
-            )}
-          />
-
-          <InfoCard
-            title="습도"
-            value={`${displayData.humidity}%`}
-            description={getHumidityComment(displayData.humidity)}
-          />
-
-          <InfoCard
-            title="PM2.5"
-            value={`${displayData.pm25 ?? '--'}㎍/㎥`}
-            description={
-              displayData.pm25 === undefined
-                ? '초미세먼지 정보를 확인 중입니다.'
-                : getPm25Comment(displayData.pm25)
-            }
-          />
-
-          <InfoCard
-            title="AQI"
-            value={displayData.aqi}
-            description={getAqiComment(displayData.aqi)}
-          />
-
-          <InfoCard
-            title="UV"
-            value={displayData.uv}
-            description={getUvComment(Number(displayData.uv))}
-          />
-
-          <InfoCard
-            title="강수량"
-            value={`${displayData.precipitation}mm`}
-            description={getRainComment(displayData.precipitation)}
-          />
-        </div>
-
-        <div className="outdoor-right-panel">
-          <div className="outdoor-chart-card">
-            <h2>실외 환경 그래프</h2>
-            <OutdoorChart />
-          </div>
-
-          <div className="location-card">
-            <h2>위치 설정</h2>
-
-            <p>현재 지역: {location}</p>
-
-            <input
-              value={inputLocation}
-              onChange={(event) => setInputLocation(event.target.value)}
-              placeholder="지역을 입력하세요 예: 창원"
+            <InfoCard
+              title="기온"
+              value={`${displayData.temperature}℃`}
+              description={getTemperatureComment(displayData.temperature)}
             />
 
-            <div className="location-actions">
-              <button type="button" onClick={handleSearchLocation} disabled={isSearching}>
-                {isSearching ? '검색 중...' : '지역 검색'}
-              </button>
-              <button type="button" onClick={handleUseCurrentLocation}>
-                GPS
-              </button>
+            <InfoCard
+              title="체감온도"
+              value={`${displayData.feelsLike ?? displayData.temperature}℃`}
+              description={getFeelsLikeComment(
+                displayData.feelsLike ?? displayData.temperature
+              )}
+            />
 
-              <button type="button" onClick={handleRefresh} disabled={isLoading}>
-                {isLoading ? '불러오는 중...' : '새로고침'}
-              </button>
+            <InfoCard
+              title="습도"
+              value={`${displayData.humidity}%`}
+              description={getHumidityComment(displayData.humidity)}
+            />
+
+            <InfoCard
+              title="PM2.5"
+              value={`${displayData.pm25 ?? '--'}㎍/㎥`}
+              description={
+                displayData.pm25 === undefined
+                  ? '초미세먼지 정보를 확인 중입니다.'
+                  : getPm25Comment(displayData.pm25)
+              }
+            />
+
+            <InfoCard
+              title="AQI"
+              value={displayData.aqi}
+              description={getAqiComment(displayData.aqi)}
+            />
+
+            <InfoCard
+              title="UV"
+              value={displayData.uv}
+              description={getUvComment(Number(displayData.uv))}
+            />
+
+            <InfoCard
+              title="강수량"
+              value={`${displayData.precipitation}mm`}
+              description={getRainComment(displayData.precipitation)}
+            />
+          </div>
+
+          <div className="outdoor-right-panel">
+            <div className="outdoor-chart-card">
+              <h2>실시간 환경 데이터</h2>
+              <OutdoorChart />
             </div>
-            {searchResults.length > 0 && (
-              <ul className="location-result-list">
-                {searchResults.map((item, index) => (
-                  <li key={`${item.name}-${index}`}>
-                    <button type="button" onClick={() => handleSelectLocation(item)}>
-                      {item.name}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            )}
+
+            <div className="location-card">
+              <h2>위치 설정</h2>
+
+              <p>현재 지역: {location}</p>
+
+              <input
+                value={inputLocation}
+                onChange={(event) => setInputLocation(event.target.value)}
+                placeholder="지역을 입력하세요 예: 창원"
+              />
+
+              <div className="location-actions">
+                <button type="button" onClick={handleSearchLocation} disabled={isSearching}>
+                  {isSearching ? '검색 중...' : '지역 검색'}
+                </button>
+                <button type="button" onClick={handleUseCurrentLocation}>
+                  GPS
+                </button>
+
+                <button type="button" onClick={handleRefresh} disabled={isLoading}>
+                  {isLoading ? '불러오는 중...' : '새로고침'}
+                </button>
+              </div>
+              {searchResults.length > 0 && (
+                <ul className="location-result-list">
+                  {searchResults.map((item, index) => (
+                    <li key={`${item.name}-${index}`}>
+                      <button type="button" onClick={() => handleSelectLocation(item)}>
+                        {item.name}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
           </div>
         </div>
       </div>

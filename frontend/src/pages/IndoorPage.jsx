@@ -14,43 +14,46 @@ export default function IndoorPage() {
 
   return (
     <section className="indoor-page">
-      <div className="indoor-card">
-        <div className="indoor-summary">
-          <InfoCard
-            title="실내 온도"
-            value={data.temperature === null ? '--℃' : `${data.temperature}℃`}
-            description={
-              data.temperature === null
-                ? '센서 연결 후 실내 온도가 표시됩니다.'
-                : getTemperatureComment(data.temperature)
-            }
-          />
-
-          <InfoCard
-            title="실내 습도"
-            value={data.humidity === null ? '--%' : `${data.humidity}%`}
-            description={
-              data.humidity === null
-                ? '센서 연결 후 실내 습도가 표시됩니다.'
-                : getHumidityComment(data.humidity)
-            }
-          />
-
-          <div className="sensor-status-card">
-            <h3>센서 상태</h3>
-            <p>{isConnected ? '연결됨' : '연결 안 됨'}</p>
-
-            <SensorConnectButton
-              isConnected={isConnected}
-              onConnect={connectSensor}
-              onDisconnect={disconnectSensor}
+      <div className="page-container">
+        <div className="indoor-card">
+          <h2>🏠 실내 환경 정보</h2>
+          <div className="indoor-summary">
+            <InfoCard
+              title="실내 온도"
+              value={data.temperature === null ? '--℃' : `${data.temperature}℃`}
+              description={
+                data.temperature === null
+                  ? '센서 연결 후 실내 온도가 표시됩니다.'
+                  : getTemperatureComment(data.temperature)
+              }
             />
-          </div>
-        </div>
 
-        <div className="indoor-chart-area">
-          <h2>실내 온습도 그래프</h2>
-          <p>센서 데이터가 연결되면 실시간 그래프가 표시됩니다.</p>
+            <InfoCard
+              title="실내 습도"
+              value={data.humidity === null ? '--%' : `${data.humidity}%`}
+              description={
+                data.humidity === null
+                  ? '센서 연결 후 실내 습도가 표시됩니다.'
+                  : getHumidityComment(data.humidity)
+              }
+            />
+
+            <div className="sensor-status-card">
+              <h3>🔗 센서 상태</h3>
+              <p>{isConnected ? '연결됨' : '연결 안 됨'}</p>
+
+              <SensorConnectButton
+                isConnected={isConnected}
+                onConnect={connectSensor}
+                onDisconnect={disconnectSensor}
+              />
+            </div>
+          </div>
+
+          <div className="indoor-chart-area">
+            <h2>📈 실내 온습도 그래프</h2>
+            <p>센서 데이터가 연결되면 실시간 그래프가 표시됩니다.</p>
+          </div>
         </div>
       </div>
     </section>

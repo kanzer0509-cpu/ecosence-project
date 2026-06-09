@@ -46,7 +46,7 @@ export default function ReportsPage() {
   return (
     <section className="report-page">
       <div className="report-card">
-        <h2>환경 보고서</h2>
+        <h2>📊 환경 보고서</h2>
 
         <p>
           주간 또는 월간 환경 데이터를 PDF 형식으로 다운로드할 수 있습니다.

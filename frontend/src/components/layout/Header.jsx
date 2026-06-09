@@ -3,7 +3,7 @@ export default function Header({ title, onMenuClick }) {
     <header className="page-header">
       <span className="page-title">{title}</span>
 
-      <h1 className="app-logo">EcoSense</h1>
+      <h1 className="header-logo-text">EcoSense</h1>
 
       <button type="button" className="menu-button" onClick={onMenuClick}>
         ☰

@@ -27,22 +27,22 @@ export default function SettingsPage() {
   return (
     <section className="settings-page">
       <div className="settings-card">
-        <h2>설정</h2>
+        <h2>⚙️ 설정</h2>
 
         {isAuthenticated ? (
           <>
             <div className="setting-item">
-              <h3>계정 정보</h3>
+              <h3>🔐 계정 정보</h3>
               <p>{user?.email ?? '이메일 정보 없음'}</p>
             </div>
 
             <div className="setting-item">
-              <h3>현재 지역</h3>
+              <h3>📍 현재 지역</h3>
               <p>{location}</p>
             </div>
 
             <button type="button" onClick={handleSyncUpload}>
-              로컬 데이터 동기화
+              <h3>☁️ 데이터 동기화</h3>
             </button>
 
             <button
