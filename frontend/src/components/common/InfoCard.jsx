@@ -17,14 +17,22 @@ export default function InfoCard({ title, value, description }) {
 
   return (
     <div className="info-card">
-      <div className="info-card-header">
-        <span className="info-card-icon">{icon}</span>
-        <h3>{title}</h3>
+      <div className="info-card-main">
+        <div className="info-card-content">
+          <div className="info-card-header">
+            <span className="info-card-icon">{icon}</span>
+            <h3>{title}</h3>
+          </div>
+
+          <strong>{value}</strong>
+
+          {description && (
+            <p className="info-card-description">{description}</p>
+          )}
+        </div>
+
+        <div className="info-card-badge">{icon}</div>
       </div>
-
-      <strong>{value}</strong>
-
-       {description && <p className="info-card-description">{description}</p>}
     </div>
   );
 }

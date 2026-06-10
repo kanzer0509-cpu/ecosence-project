@@ -36,6 +36,13 @@ button:disabled {
   text-align: left;
 }
 
+.info-card-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
 .info-card-header {
   display: flex;
   align-items: center;
@@ -44,7 +51,7 @@ button:disabled {
 }
 
 .info-card-icon {
-  font-size: 22px;
+  font-size: 18px;
 }
 
 .info-card h3 {
@@ -56,15 +63,29 @@ button:disabled {
 .info-card strong {
   display: block;
   margin-bottom: 8px;
-  font-size: 32px;
+  font-size: 28px;
   color: #0f172a;
 }
 
-.info-card p {
+.info-card-description {
   margin: 0;
   font-size: 14px;
   color: #475569;
   line-height: 1.5;
+}
+
+.info-card-badge {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: #eff6ff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-size: 24px;
+  flex-shrink: 0;
 }
 
 /* 헤더 */
@@ -549,4 +570,66 @@ body {
   .spike-grid {
     grid-template-columns: 1fr;
   }
+}
+
+.info-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+  padding: 18px;
+  text-align: left;
+}
+
+.info-card-main {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.info-card-content {
+  flex: 1;
+}
+
+.info-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.info-card-icon {
+  font-size: 18px;
+}
+
+.info-card h3 {
+  margin: 0;
+  font-size: 15px;
+  color: #64748b;
+}
+
+.info-card strong {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 28px;
+  color: #0f172a;
+}
+
+.info-card-description {
+  margin: 0;
+  font-size: 14px;
+  color: #475569;
+  line-height: 1.5;
+}
+
+.info-card-badge {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  background: #eff6ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
 }
