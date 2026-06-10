@@ -21,14 +21,26 @@ ChartJS.register(
 
 export default function OutdoorChart() {
   const data = {
-    labels: ['09시', '12시', '15시', '18시', '21시'],
+    labels: ['09시', '10시', '11시', '12시', '13시', '14시', '15시', '16시', '17시', '18시'],
     datasets: [
       {
         label: '기온(℃)',
-        data: [21, 24, 26, 23, 20],
+        data: [21, 22, 23, 24, 25, 26, 26, 25, 23, 20],
+        borderWidth: 3,
+        tension: 0.4,
+        pointRadius: 4,
       },
     ],
   };
 
-  return <Line data={data} />;
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+  };
+
+  return (
+    <div className="outdoor-chart-wrapper">
+      <Line data={data} options={options} />
+    </div>
+  );
 }

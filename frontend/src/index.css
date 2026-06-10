@@ -213,7 +213,7 @@ button:disabled {
 
 .outdoor-layout {
   display: grid;
-  grid-template-columns: 360px 1fr;
+  grid-template-columns: 420px 1fr;
   gap: 24px;
   align-items: start;
 }
@@ -250,6 +250,10 @@ button:disabled {
   font-size: 22px;
   font-weight: 700;
   color: #2563eb;
+}
+
+.outdoor-chart-wrapper {
+  height: 300px;
 }
 
 .location-card p {
@@ -649,4 +653,53 @@ button:disabled {
   .spike-grid {
     grid-template-columns: 1fr;
   }
+}
+
+.info-card {
+  padding: 14px 16px;
+}
+
+.info-card strong {
+  font-size: 24px;
+}
+
+.info-card-description {
+  font-size: 13px;
+}
+
+.info-card-badge {
+  width: 42px;
+  height: 42px;
+  font-size: 22px;
+}
+
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 80px;
+  padding: 0 24px;
+
+  background: white;
+  border-bottom: 1px solid #e5e7eb;
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06);
+
+  position: relative;
+}
+
+.header-logo {
+  height: 70px;
+  width: auto;
+  object-fit: contain;
+}
+
+.page-title {
+  position: absolute;
+  left: 24px;
+  font-weight: 700;
+}
+
+.menu-button {
+  position: absolute;
+  right: 24px;
 }
